@@ -50,13 +50,15 @@ const resolvers = {
             throw AuthenticationError('You need to be logged in!');
         },
 
-        deleteBook: async (parent, book, context) => {
+        deleteBook: async (parent, {bookId}, context) => {
             // see if user has valid jwt by checking if they have a context property
             if (context.user) {
                 return User.findOneAndUpdate(
                   { _id: context.user._id },
                   {
-                    $pull: { savedBooks: book },
+                    $pull: { 
+                      savedBooks: { bookId: bookId },
+                    },
                   },
                   {
                     new: true,
