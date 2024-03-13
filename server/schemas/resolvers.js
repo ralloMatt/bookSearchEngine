@@ -33,13 +33,13 @@ const resolvers = {
             return { token, user };
         },
 
-        saveBook: async (parent, book, context) => {
+        saveBook: async (parent, {input}, context) => {
             // see if user has valid jwt by checking if they have a context property
             if (context.user) {
                 return User.findOneAndUpdate(
                   { _id: context.user._id },
                   {
-                    $addToSet: { savedBooks: book },
+                    $push: { savedBooks: input },
                   },
                   {
                     new: true,
