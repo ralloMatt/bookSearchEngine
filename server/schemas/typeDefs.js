@@ -4,7 +4,7 @@ const typeDefs = `
         username: String!
         email: String!
         bookCount: Int
-        savedBook: [Book]
+        savedBooks: [Book]
     }
 
     type Book {
