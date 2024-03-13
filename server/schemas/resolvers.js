@@ -4,11 +4,8 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 const resolvers = {
 
     Query: {
-        me: async (parent, args, context) => { // retrieve the logged in user from the contrext and find the user in the database
-            if (context.user) {
-              return User.findOne({ _id: context.user._id });
-            }
-            throw AuthenticationError;
+        me: async (parent, { userId }, context) => { // retrieve the logged in user from the contrext and find the user in the database
+            return User.findOne({ _id: userId });
         },
     },
 
@@ -16,10 +13,10 @@ const resolvers = {
         addUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
             const token = signToken(user);
-            return { token, profile };
+            return { token, user };
         },
 
-        login: async (parent, { email, password}) => {
+        login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
 
             if(!user) { // check if user
